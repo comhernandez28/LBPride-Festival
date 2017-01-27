@@ -1,6 +1,6 @@
 <?php
 /* You Mail ID */
-define('TO_EMAIL', 'omar@izonemarketing.com');
+define('TO_EMAIL', 'jannay@izonemarketing.com');
 class Mailer{
 
     private $_params;
