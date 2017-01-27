@@ -1,8 +1,8 @@
 <?php
 /* You Mail ID */
-define('TO_EMAIL', 'ergo7care@gmail.com');
+define('TO_EMAIL', 'jannay@izonemarketing.com');
 class Mailer{
-	
+
     private $_params;
     private $_errors;
 
@@ -11,15 +11,15 @@ class Mailer{
         $this->_errors = array();
     }
 
-    public function run(){	
+    public function run(){
         if($this->Validate()){
             $res = $this->SendEmail();
             if($res === true)
                 $this->OnSuccess();
             else
-                $this->OnError();	
+                $this->OnError();
         }else
-            $this->OnError();		
+            $this->OnError();
     }
 
     private function LoadParams(){
@@ -39,43 +39,43 @@ class Mailer{
 
         if(!(isset($this->_params['message']) && $this->_params['message'] != ''))
             $this->_errors['message'] = 'empty_message';
-        
+
         return (count($this->_errors) == 0);
     }
 
     private function SendEmail(){
-        $headers = 
-		
+        $headers =
+
 		/* --From and reply options--- */
         //'From: "' . $this->_params['name'] . '" <' . $this->_params['email'] . ">\r\n" .
         //  'Reply-To: "' . $this->_params['name'] . '" <' . $this->_params['email'] . ">\r\n" .
             'X-Mailer: PHP/' . phpversion();
-			 
+
         $subject	= "Enquiry";
 		$message="\n\n  Name: ".$this->_params['name']."\n\n  Email: ".$this->_params['email']."\n\n Subject: Enquiry "."\n\n Message: ".$this->_params['message'];
-		
-        $to = TO_EMAIL;       
+
+        $to = TO_EMAIL;
         return mail($to, $subject, $message, $headers);
     }
 
-    private function OnSuccess(){        
+    private function OnSuccess(){
         echo '{"success": true}';
     }
 
     private function OnError(){
         $response = '{';
         $response .= '"success": false, "errors": [';
-        
-        foreach($this->_errors as $key => $value) {  
+
+        foreach($this->_errors as $key => $value) {
             $response .= "{ \"field\": \"$key\", \"error\": \"$value\"},";
         }
         if(count($this->_errors) > 0)
             $response = substr($response, 0, -1);
         $response .= ']}';
-        
+
         echo $response;
     }
-    
+
 }
 $mailer = new Mailer();
 $mailer->run();
